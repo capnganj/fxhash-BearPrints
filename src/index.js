@@ -1,5 +1,5 @@
 //CAPNGANJ BearPrints for #fxhashturnsone
-//November, 2022
+//November -> December, 2022
 
 //imports
 import p5 from 'p5';
@@ -16,13 +16,15 @@ const s = ( sk ) => {
 
   //static variables that are set once using the iteration hash
   let numCurves
-  let min, max  //trig function Y VALUE variables
+  let waveA_topLength, waveA_bottomLength, waveB_topLength, waveB_bottomLength //trig function Y VALUE variables
+  let leftToRight
 
   //dynamic vars -- these get reset on screen resize
   let i
   let skWidth
   let skMarginSize, skStrokeThickness
   let minHeight, maxHeight //trig function Y VALUE multiplier -- changes with screen size
+  let waveA_topAmplitude, waveA_bottomAmplitude, waveB_topAmplitude, waveB_bottomAmplitude
   
 
   //sketch setup
@@ -33,8 +35,6 @@ const s = ( sk ) => {
     skWidth = w.w 
     skDiv = sk.createCanvas(w.w, w.h).elt
 
-    
-
     //html setup
     document.body.style.backgroundColor = 'rgb(5,5,5)'
     document.body.style.display = 'flex'
@@ -42,7 +42,6 @@ const s = ( sk ) => {
     document.body.style.alignItems = 'center'
     document.body.style.height = window.innerHeight.toString() + 'px'
 
-    //skDiv = document.createElement('div')
     //skDiv.style.backgroundColor = feet.background.value
     skDiv.style.display = 'flex'
     skDiv.style.justifyContent = 'center'
@@ -51,6 +50,7 @@ const s = ( sk ) => {
     skDiv.style.width = w.w.toString() + 'px'
     document.body.appendChild(skDiv)
     
+
     //new featuresClass
     feet = new Features();
    
@@ -61,8 +61,11 @@ const s = ( sk ) => {
     console.log("fxhashFeatures", window.$fxhashFeatures);
     //console.log("HashSmokeFeatures", feet);
 
-    min = feet.map(fxrand(), 0, 1, 1.5, 3)
-    max = feet.map(fxrand(), 0, 1, 5, 8)
+    waveA_topLength = feet.map(fxrand(), 0, 1, 1.5, 3)
+    waveA_bottomLength = feet.map(fxrand(), 0, 1, 5, 8)
+
+    leftToRight = Math.round( fxrand() )
+
     minHeight = feet.map(fxrand(), 0, 1, 15, 45)
     maxHeight = feet.map(fxrand(), 0, 1, 10, 25)
 
@@ -76,7 +79,7 @@ const s = ( sk ) => {
 
     //set i to number of circles here and in resize
     numCurves = 90;
-    i = 10;
+    i = 0;
     sk.background(235, 213, 179);
     //sk.strokeWeight(50)
 
@@ -102,15 +105,20 @@ const s = ( sk ) => {
       sk.stroke(col);
 
       //height mapped per wave
-      const height = feet.map(i, 0, numCurves, minHeight, maxHeight)
-
-
+      const waveA_amplitude = feet.map(i, 0, numCurves, waveA_topAmplitude, waveA_bottomAmplitude)
 
       //position
       sk.beginShape()
       for (let j = 0; j < Math.PI * 2; j+=0.01) {
-        let x = sk.map(j, 0, Math.PI * 2, 100, skWidth-100)
-        let y = (Math.sin(j * feet.map(i, 10, 100, min, max)) * height) + i * 8
+        
+        const x = leftToRight ? sk.map(j, 0, Math.PI * 2, skMarginSize, skWidth-skMarginSize) : sk.map(j, Math.PI * 2, 0, skMarginSize, skWidth-skMarginSize)
+
+        const amplitudeA = Math.sin( j * feet.map(i, 10, 100, waveA_topLength, waveA_bottomLength) ) * waveA_amplitude
+        const amplitudeB = 0
+        const offset = feet.map(i, 0, numCurves, skMarginSize * 1.1, (skWidth * 1.25) - (skMarginSize * 1.5))
+
+        const y = amplitudeA + amplitudeB + offset
+        
         sk.vertex(x , y)   
       }
       sk.endShape()
@@ -132,7 +140,8 @@ const s = ( sk ) => {
 
   //handle window resize
   sk.windowResized = () => {
-    i=10
+
+    i=0
     const w = computeCanvasSize()
 
     //set html size
@@ -186,7 +195,14 @@ const s = ( sk ) => {
     //using global skWidth (which is set during seup and on screen resize), compute and set key sketch length dimensions
     
     //stroke thickness
-    sk.strokeWeight(skWidth * 0.02)
+    sk.strokeWeight(skWidth * 0.03)
+
+    //margins
+    skMarginSize = skWidth * 0.1
+
+    //amplitudes
+    waveA_topAmplitude = feet.map(fxrand(), 0, 1, skWidth * 0.02, skWidth * 0.05)
+    waveA_bottomAmplitude = feet.map(fxrand(), 0, 1, skWidth * 0.01, skWidth * 0.025)
 
   }
 
