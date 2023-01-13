@@ -12,6 +12,12 @@ class Features {
         };
         this.setColorPalette();
 
+        this.background = {
+            tag: "",
+            value: ""
+        }
+        this.setBackground();
+
         //amplitude seeds - used to drive curve heights
         this.amplitudeSeeds = {
             aTopSeed: 0.0,
@@ -168,6 +174,41 @@ class Features {
         //inverted?
         if( fxrand() > 0.777 ) {
             this.color.inverted = true;
+        }
+    }
+
+    //set sketch background color
+    setBackground() {
+        let b = fxrand();
+        if (b < 0.11) {
+            this.background.tag = "Rolling Paper";
+            this.background.value = rgb(235, 213, 179);
+        }
+        else if (b < 0.28) {
+            this.background.tag = "fxhash Dark";
+            this.background.value = rgb(38, 38, 38);
+        }
+        else if (b < 0.39) {
+            this.background.tag = "Newspaper";
+            this.background.value = rgb(245, 242, 232);
+        }
+        else if (b < 0.47) {
+            this.background.tag = "Brown Paper Bag";
+            this.background.value = rgb(181, 155, 124);
+        }
+        else if (b < 0.64) {
+            this.background.tag = "Palette Light";
+            let col = this.color.inverted ? 
+            this.interpolateFn(this.map(fxrand(), 0, 1, 0.1, 0.2)) : 
+            this.interpolateFn(this.map(fxrand(), 0, 1, 0.8, 0.9));
+            this.background.value = col;
+        }
+        else {
+            this.background.tag = "Palette Dark";
+            let col = this.color.inverted ? 
+            this.interpolateFn(this.map(fxrand(), 0, 1, 0.8, 0.9)) : 
+            this.interpolateFn(this.map(fxrand(), 0, 1, 0.1, 0.2));
+            this.background.value = col;
         }
     }
 

@@ -57,6 +57,7 @@ const s = ( sk ) => {
     // FX Features
     window.$fxhashFeatures = {
       "Palette" : feet.color.inverted ? feet.color.name + " Invert" : feet.color.name,
+      "Backgound" : feet.background.tag,
     };
     console.log("fxhashFeatures", window.$fxhashFeatures);
     //console.log("HashSmokeFeatures", feet);
@@ -81,9 +82,10 @@ const s = ( sk ) => {
 
 
     //set i to number of circles here and in resize
-    numCurves = 90;
+    numCurves = 123;
     i = 0;
-    sk.background(235, 213, 179);
+    const col = feet.background.value
+    sk.background(col.r, col.g, col.b);
     //sk.strokeWeight(50)
 
     //set ket sketch lengths right before letting it rip
@@ -98,12 +100,17 @@ const s = ( sk ) => {
     //draw them waves
     if (i <= numCurves) {
 
-      //shadow
-      //sk.drawingContext.shadowBlur = length * feet.map(i, 0, 100, 0.0005, 0.05);
-      
-
       //colors
-      let rgb = i % 2 == 0 ? feet.interpolateFn(feet.map(i, 0, numCurves, 0, 0.8)) : feet.interpolateFn(feet.map(i+4, 0, numCurves, 0, 0.8));
+      let rgb
+      if (feet.color.inverted) {
+        rgb = i % 2 == 0 ? 
+        feet.interpolateFn(feet.map(i, 0, numCurves, 0, 0.8)) : 
+        feet.interpolateFn(feet.map(i+4, 0, numCurves, 0, 0.8));
+      } else {
+        rgb = i % 2 == 0 ? 
+        feet.interpolateFn(feet.map(i, 0, numCurves, 0.8, 0)) : 
+        feet.interpolateFn(feet.map(i+4, 0, numCurves, 0.8, 0));
+      }
       let col = sk.color(rgb.r, rgb.g, rgb.b);
       sk.stroke(col);
 
@@ -139,7 +146,7 @@ const s = ( sk ) => {
       if( previewed == false) {
         fxpreview();
         previewed = true;
-        //download();
+        download();
       }
     }
   };
@@ -218,7 +225,7 @@ const s = ( sk ) => {
   function download() {
     var link = document.createElement('a');
     link.download = 'BearPrint.png';
-    link.href = document.getElementById('defaultCanvas0').toDataURL()
+    link.href = document.getElementById('hashish').toDataURL()
     link.click();
   }
 };
