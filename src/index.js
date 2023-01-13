@@ -64,6 +64,9 @@ const s = ( sk ) => {
     waveA_topLength = feet.map(fxrand(), 0, 1, 1.5, 3)
     waveA_bottomLength = feet.map(fxrand(), 0, 1, 5, 8)
 
+    waveB_topLength = feet.map(fxrand(), 0, 1, 0.5, 1.0)
+    waveB_bottomLength = feet.map(fxrand(), 0, 1, 2.0, 3.0)
+
     leftToRight = Math.round( fxrand() )
 
     minHeight = feet.map(fxrand(), 0, 1, 15, 45)
@@ -106,16 +109,19 @@ const s = ( sk ) => {
 
       //height mapped per wave
       const waveA_amplitude = feet.map(i, 0, numCurves, waveA_topAmplitude, waveA_bottomAmplitude)
+      const waveB_amplitude = feet.map(i, 0, numCurves, waveB_topAmplitude, waveB_bottomAmplitude)
 
       //position
       sk.beginShape()
       for (let j = 0; j < Math.PI * 2; j+=0.01) {
         
-        const x = leftToRight ? sk.map(j, 0, Math.PI * 2, skMarginSize, skWidth-skMarginSize) : sk.map(j, Math.PI * 2, 0, skMarginSize, skWidth-skMarginSize)
+        const x = leftToRight ? 
+          sk.map(j, 0, Math.PI * 2, skMarginSize, skWidth-skMarginSize) : 
+          sk.map(j, Math.PI * 2, 0, skMarginSize, skWidth-skMarginSize)
 
         const amplitudeA = Math.sin( j * feet.map(i, 10, 100, waveA_topLength, waveA_bottomLength) ) * waveA_amplitude
-        const amplitudeB = 0
-        const offset = feet.map(i, 0, numCurves, skMarginSize * 1.1, (skWidth * 1.25) - (skMarginSize * 1.5))
+        const amplitudeB = Math.sin( (j + 5) * feet.map(i, 10, 100, waveB_topLength, waveB_bottomLength) ) * waveB_amplitude
+        const offset = feet.map(i, 0, numCurves, skMarginSize * 1.6, (skWidth * 1.25) - (skMarginSize * 1.5))
 
         const y = amplitudeA + amplitudeB + offset
         
@@ -200,9 +206,12 @@ const s = ( sk ) => {
     //margins
     skMarginSize = skWidth * 0.1
 
-    //amplitudes
-    waveA_topAmplitude = feet.map(fxrand(), 0, 1, skWidth * 0.02, skWidth * 0.05)
-    waveA_bottomAmplitude = feet.map(fxrand(), 0, 1, skWidth * 0.01, skWidth * 0.025)
+    //curve amplitudes - widths are set in the loop... heights have to respond to height
+    waveA_topAmplitude = feet.map(feet.amplitudeSeeds.aTopSeed, 0, 1, skWidth * 0.02, skWidth * 0.05)
+    waveA_bottomAmplitude = feet.map(feet.amplitudeSeeds.aBottomSeed, 0, 1, skWidth * 0.01, skWidth * 0.025)
+
+    waveB_topAmplitude = feet.map(feet.amplitudeSeeds.bTopSeed, 0, 1, skWidth * 0.05, skWidth * 0.08)
+    waveB_bottomAmplitude = feet.map(feet.amplitudeSeeds.bBottomSeed, 0, 1, skWidth * 0.03, skWidth * 0.05)
 
   }
 

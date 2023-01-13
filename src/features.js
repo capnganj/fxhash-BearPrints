@@ -12,6 +12,14 @@ class Features {
         };
         this.setColorPalette();
 
+        //amplitude seeds - used to drive curve heights
+        this.amplitudeSeeds = {
+            aTopSeed: 0.0,
+            aBottomSeed: 0.0,
+            bTopSeed: 0.0,
+            bBottomSeed: 0.0
+        }
+        this.setAmplitudeSeeds();
         
     }
 
@@ -163,100 +171,12 @@ class Features {
         }
     }
 
-    setNoise() {
-        let n = fxrand();
-        if (n < 0.38) {
-            this.noise.tag = "Quiet"
-        }
-        else if ( n < 0.83) {
-            this.noise.tag = "Nice"
-        }
-        else {
-            this.noise.tag = "Noisy"
-        }
-        this.noise.topValue = this.map(n, 0, 1, 0.05, 0.2);
-        this.noise.baseValue = this.map(n, 0, 1, 0.2, 0.5);
-    }
-
-    setOpacity() {
-        let o = fxrand();
-        if (o < 0.41) {
-            this.opacity.tag = "Low";
-        }
-        else if (o < 0.69) {
-            this.opacity.tag = "Some";
-        }
-        else {
-            this.opacity.tag = "High"
-        }
-        this.opacity.baseValue = this.map(o, 0, 1, 215, 185);
-        this.opacity.topValue = this.map(o, 0, 1, 255, 235);
-    }
-
-    setDirection() {
-        let o = fxrand();
-        if (o > 0.5) {
-            this.direction.tag = "Clockwise";
-        }
-        else {
-            this.direction.tag = "Counterclockwise"
-        }
-        this.direction.value = Math.round(o);
-    }
-
-    setRadii() {
-        let r = fxrand();
-        if (r < 0.27) {
-            this.radii.tag = "Small";
-        }
-        else if (r < 0.43) {
-            this.radii.tag = "Medium";
-        }
-        else if ( r < 0.71) {
-            this.radii.tag = "Large";
-        }
-        else if ( r < 0.82 ) {
-            this.radii.tag = "Extra Large";
-        }
-        else {
-            this.radii.tag = "Extra Extra Large";
-        }
-        this.radii.baseValue = this.map(r, 0, 1, 9, 5);
-        this.radii.topValue = this.map(r, 0, 1, 40, 30);
-    }
-
-    setQuantity() {
-        let q = fxrand();
-        if (q < 0.43) {
-            this.quantity.tag = "Under"
-        }
-        else if (q < 0.79) {
-            this.quantity.tag = "Within"
-        }
-        else {
-            this.quantity.tag = "Over"
-        }
-        this.quantity.value = Math.round(this.map(q, 0, 1, 300, 360))
-    }
-
-    setPosition() {
-        let p = fxrand();
-        if (p < 0.25) {
-            this.position.tag = "Right"
-            this.position.orientation = "V"
-        }
-        else if (p < 0.5) {
-            this.position.tag = "Left"
-            this.position.orientation = "V"
-        }
-        else if ( p < 0.75 ) {
-            this.position.tag = "Top"
-            this.position.orientation = "V"
-        }
-        else {
-            this.position.tag = "Bottom"
-            this.position.orientation = "V"
-        }
+    //set top and bottom (a and b sets of curves) amplitude seed values
+    setAmplitudeSeeds() {
+        this.amplitudeSeeds.aTopSeed = fxrand()
+        this.amplitudeSeeds.aBottomSeed = fxrand()
+        this.amplitudeSeeds.bTopSeed = fxrand()
+        this.amplitudeSeeds.bBottomSeed = fxrand()
     }
 }
 
