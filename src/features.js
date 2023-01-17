@@ -26,6 +26,15 @@ class Features {
             bBottomSeed: 0.0
         }
         this.setAmplitudeSeeds();
+
+        //palette range - what part of the color scale are we using
+        this.paletteRange = {
+            tag: "",
+            lowValue: 0.1,
+            highValue: 0.9
+        }
+        this.setPaletteRange()
+        
         
     }
 
@@ -180,23 +189,23 @@ class Features {
     //set sketch background color
     setBackground() {
         let b = fxrand();
-        if (b < 0.11) {
+        if (b < 0.18) {
             this.background.tag = "Rolling Paper";
             this.background.value = rgb(235, 213, 179);
         }
-        else if (b < 0.28) {
+        else if (b < 0.38) {
             this.background.tag = "fxhash Dark";
             this.background.value = rgb(38, 38, 38);
         }
-        else if (b < 0.39) {
+        else if (b < 0.59) {
             this.background.tag = "Newspaper";
             this.background.value = rgb(245, 242, 232);
         }
-        else if (b < 0.47) {
+        else if (b < 0.77) {
             this.background.tag = "Brown Paper Bag";
             this.background.value = rgb(181, 155, 124);
         }
-        else if (b < 0.64) {
+        else if (b < 0.86) {
             this.background.tag = "Palette Light";
             let col = this.color.inverted ? 
             this.interpolateFn(this.map(fxrand(), 0, 1, 0.1, 0.2)) : 
@@ -218,6 +227,32 @@ class Features {
         this.amplitudeSeeds.aBottomSeed = fxrand()
         this.amplitudeSeeds.bTopSeed = fxrand()
         this.amplitudeSeeds.bBottomSeed = fxrand()
+    }
+
+    //set color palette range 
+    setPaletteRange() {
+        const p = fxrand()
+
+        if (p < 0.15) {
+            this.paletteRange.tag = "Lows"
+            this.paletteRange.lowValue = 0.05
+            this.paletteRange.highValue = 0.6
+        } 
+        else if ( p < 0.33 ) {
+            this.paletteRange.tag = "Mids"
+            this.paletteRange.lowValue = 0.35
+            this.paletteRange.highValue = 0.66
+        }
+        else if ( p < 0.57 ) {
+            this.paletteRange.tag = "Highs"
+            this.paletteRange.lowValue = 0.4
+            this.paletteRange.highValue = 0.95
+        }
+        else {
+            this.paletteRange.tag = "Full Spectrum"
+            this.paletteRange.lowValue = 0.1
+            this.paletteRange.highValue = 0.9
+        }
     }
 }
 

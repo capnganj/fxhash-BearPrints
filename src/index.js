@@ -1,5 +1,5 @@
-//CAPNGANJ BearPrints for #fxhashturnsone
-//November -> December, 2022
+//CAPNGANJ BearPrints for fxhash
+//November 2022 -> January 2023
 
 //imports
 import p5 from 'p5';
@@ -58,6 +58,7 @@ const s = ( sk ) => {
     window.$fxhashFeatures = {
       "Palette" : feet.color.inverted ? feet.color.name + " Invert" : feet.color.name,
       "Backgound" : feet.background.tag,
+      "Palette Range" : feet.paletteRange.tag
     };
     console.log("fxhashFeatures", window.$fxhashFeatures);
     //console.log("HashSmokeFeatures", feet);
@@ -104,14 +105,14 @@ const s = ( sk ) => {
       let rgb
       if (feet.color.inverted) {
         rgb = i % 2 == 0 ? 
-        feet.interpolateFn(feet.map(i, 0, numCurves, 0, 0.8)) : 
-        feet.interpolateFn(feet.map(i+4, 0, numCurves, 0, 0.8));
+        feet.interpolateFn(feet.map(i, 0, numCurves, feet.paletteRange.lowValue, feet.paletteRange.highValue)) : 
+        feet.interpolateFn(feet.map(i+4, 0, numCurves, feet.paletteRange.lowValue, feet.paletteRange.highValue));
       } else {
         rgb = i % 2 == 0 ? 
-        feet.interpolateFn(feet.map(i, 0, numCurves, 0.8, 0)) : 
-        feet.interpolateFn(feet.map(i+4, 0, numCurves, 0.8, 0));
+        feet.interpolateFn(feet.map(i, 0, numCurves, feet.paletteRange.highValue, feet.paletteRange.lowValue)) : 
+        feet.interpolateFn(feet.map(i+4, 0, numCurves, feet.paletteRange.highValue, feet.paletteRange.lowValue));
       }
-      let col = sk.color(rgb.r, rgb.g, rgb.b);
+      const col = sk.color(rgb.r, rgb.g, rgb.b);
       sk.stroke(col);
 
       //height mapped per wave
@@ -119,22 +120,30 @@ const s = ( sk ) => {
       const waveB_amplitude = feet.map(i, 0, numCurves, waveB_topAmplitude, waveB_bottomAmplitude)
 
       //position
+      sk.noFill()
       sk.beginShape()
       for (let j = 0; j < Math.PI * 2; j+=0.01) {
         
         const x = leftToRight ? 
-          sk.map(j, 0, Math.PI * 2, skMarginSize, skWidth-skMarginSize) : 
-          sk.map(j, Math.PI * 2, 0, skMarginSize, skWidth-skMarginSize)
+          sk.map(j, 0, Math.PI * 2, -skMarginSize, skWidth+skMarginSize) : 
+          sk.map(j, Math.PI * 2, 0,-skMarginSize, skWidth+skMarginSize)
 
         const amplitudeA = Math.sin( j * feet.map(i, 10, 100, waveA_topLength, waveA_bottomLength) ) * waveA_amplitude
         const amplitudeB = Math.sin( (j + 5) * feet.map(i, 10, 100, waveB_topLength, waveB_bottomLength) ) * waveB_amplitude
-        const offset = feet.map(i, 0, numCurves, skMarginSize * 1.6, (skWidth * 1.25) - (skMarginSize * 1.5))
+        const offset = feet.map(i, 0, numCurves, skMarginSize * 4, (skWidth * 1.25) - (skMarginSize * 5))
 
         const y = amplitudeA + amplitudeB + offset
         
         sk.vertex(x , y)   
       }
       sk.endShape()
+
+      //draw margin rectangles
+      const back = feet.background.value
+      sk.noStroke()
+      sk.fill(back.r, back.g, back.b)
+      sk.rect(0, 0, skMarginSize, skWidth * 2)
+      sk.rect(skWidth - skMarginSize, 0, skMarginSize, skWidth * 2)
 
       //increment
       i++
@@ -211,7 +220,7 @@ const s = ( sk ) => {
     sk.strokeWeight(skWidth * 0.03)
 
     //margins
-    skMarginSize = skWidth * 0.1
+    skMarginSize = skWidth * 0.04
 
     //curve amplitudes - widths are set in the loop... heights have to respond to height
     waveA_topAmplitude = feet.map(feet.amplitudeSeeds.aTopSeed, 0, 1, skWidth * 0.02, skWidth * 0.05)
