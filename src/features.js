@@ -5,13 +5,14 @@ import { rgb, color } from 'd3-color';
 class Features {
     constructor() {
 
-        //color scheme 
+        //color palette 
         this.color = {
             name: "",
             inverted: false
         };
         this.setColorPalette();
 
+        //background color
         this.background = {
             tag: "",
             value: ""
@@ -27,6 +28,15 @@ class Features {
         }
         this.setAmplitudeSeeds();
 
+        //wavelengs
+        this.wavelengths = {
+            aTop: 0.0,
+            aBottom: 0.0,
+            bTop: 0.0,
+            bBottom: 0.0
+        }
+        this.setWavelengths()
+
         //palette range - what part of the color scale are we using
         this.paletteRange = {
             tag: "",
@@ -35,7 +45,17 @@ class Features {
         }
         this.setPaletteRange()
         
-        
+        //number of curves
+        this.curveCount = 0
+        this.setCurveCount()
+
+        //left or right handed
+        this.hand = {
+            tag: "",
+            value: false
+        }
+        this.setHand()
+
     }
 
     //map function logic from processing <3
@@ -227,6 +247,45 @@ class Features {
         this.amplitudeSeeds.aBottomSeed = fxrand()
         this.amplitudeSeeds.bTopSeed = fxrand()
         this.amplitudeSeeds.bBottomSeed = fxrand()
+    }
+
+    setWavelengths() {
+        this.wavelengths.aTop = this.map(fxrand(), 0, 1, 1.5, 3)
+        this.wavelengths.aBottom = this.map(fxrand(), 0, 1, 5, 8)
+
+        this.wavelengths.bTop = this.map(fxrand(), 0, 1, 0.5, 1.0)
+        this.wavelengths.bBottom = this.map(fxrand(), 0, 1, 2.0, 3.0)
+    }
+
+    setHand() {
+        const h = fxrand()
+        if (h < 0.12) {
+            this.hand.tag = "Left"
+            this.hand.value = 0
+            
+        } else {
+            this.hand.tag = "Right"
+            this.hand.value = 1
+        }
+    }
+
+    setCurveCount() {
+        const c = fxrand()
+        if (c < 0.07) {
+            this.curveCount = 123
+        } 
+        else if (c < 0.23) {
+            this.curveCount = 128
+        }
+        else if (c < 0.57) {
+            this.curveCount = 139   
+        }
+        else if (c < 0.79) {
+            this.curveCount = 167
+        }
+        else {
+            this.curveCount = 180
+        }
     }
 
     //set color palette range 

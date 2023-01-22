@@ -16,8 +16,6 @@ const s = ( sk ) => {
 
   //static variables that are set once using the iteration hash
   let numCurves
-  let waveA_topLength, waveA_bottomLength, waveB_topLength, waveB_bottomLength //trig function Y VALUE variables
-  let leftToRight
 
   //dynamic vars -- these get reset on screen resize
   let i
@@ -58,21 +56,12 @@ const s = ( sk ) => {
     window.$fxhashFeatures = {
       "Palette" : feet.color.inverted ? feet.color.name + " Invert" : feet.color.name,
       "Backgound" : feet.background.tag,
-      "Palette Range" : feet.paletteRange.tag
+      "Palette Range" : feet.paletteRange.tag,
+      "Direction" : feet.hand.tag,
+      "Layer Count" : feet.curveCount.toString()
     };
     console.log("fxhashFeatures", window.$fxhashFeatures);
     //console.log("HashSmokeFeatures", feet);
-
-    waveA_topLength = feet.map(fxrand(), 0, 1, 1.5, 3)
-    waveA_bottomLength = feet.map(fxrand(), 0, 1, 5, 8)
-
-    waveB_topLength = feet.map(fxrand(), 0, 1, 0.5, 1.0)
-    waveB_bottomLength = feet.map(fxrand(), 0, 1, 2.0, 3.0)
-
-    leftToRight = Math.round( fxrand() )
-
-    minHeight = feet.map(fxrand(), 0, 1, 15, 45)
-    maxHeight = feet.map(fxrand(), 0, 1, 10, 25)
 
 
     //set the background color and other sketch-level variables
@@ -83,7 +72,7 @@ const s = ( sk ) => {
 
 
     //set i to number of circles here and in resize
-    numCurves = 123;
+    numCurves = feet.curveCount;
     i = 0;
     const col = feet.background.value
     sk.background(col.r, col.g, col.b);
@@ -102,15 +91,16 @@ const s = ( sk ) => {
     if (i <= numCurves) {
 
       //colors
+      const shift = feet.curveCount > 140 ? 8 : 4
       let rgb
       if (feet.color.inverted) {
         rgb = i % 2 == 0 ? 
         feet.interpolateFn(feet.map(i, 0, numCurves, feet.paletteRange.lowValue, feet.paletteRange.highValue)) : 
-        feet.interpolateFn(feet.map(i+4, 0, numCurves, feet.paletteRange.lowValue, feet.paletteRange.highValue));
+        feet.interpolateFn(feet.map(i+shift, 0, numCurves, feet.paletteRange.lowValue, feet.paletteRange.highValue));
       } else {
         rgb = i % 2 == 0 ? 
         feet.interpolateFn(feet.map(i, 0, numCurves, feet.paletteRange.highValue, feet.paletteRange.lowValue)) : 
-        feet.interpolateFn(feet.map(i+4, 0, numCurves, feet.paletteRange.highValue, feet.paletteRange.lowValue));
+        feet.interpolateFn(feet.map(i+shift, 0, numCurves, feet.paletteRange.highValue, feet.paletteRange.lowValue));
       }
       const col = sk.color(rgb.r, rgb.g, rgb.b);
       sk.stroke(col);
@@ -124,13 +114,13 @@ const s = ( sk ) => {
       sk.beginShape()
       for (let j = 0; j < Math.PI * 2; j+=0.01) {
         
-        const x = leftToRight ? 
+        const x = feet.hand.value ? 
           sk.map(j, 0, Math.PI * 2, -skMarginSize, skWidth+skMarginSize) : 
           sk.map(j, Math.PI * 2, 0,-skMarginSize, skWidth+skMarginSize)
 
-        const amplitudeA = Math.sin( j * feet.map(i, 10, 100, waveA_topLength, waveA_bottomLength) ) * waveA_amplitude
-        const amplitudeB = Math.sin( (j + 5) * feet.map(i, 10, 100, waveB_topLength, waveB_bottomLength) ) * waveB_amplitude
-        const offset = feet.map(i, 0, numCurves, skMarginSize * 4, (skWidth * 1.25) - (skMarginSize * 5))
+        const amplitudeA = Math.sin( j * feet.map(i, 10, 100, feet.wavelengths.aTop, feet.wavelengths.aBottom) ) * waveA_amplitude
+        const amplitudeB = Math.sin( (j + 5) * feet.map(i, 10, 100, feet.wavelengths.bTop, feet.wavelengths.bBottom) ) * waveB_amplitude
+        const offset = feet.map(i, 0, numCurves, skMarginSize * 5, (skWidth * 1.25) - (skMarginSize * 5))
 
         const y = amplitudeA + amplitudeB + offset
         
@@ -174,7 +164,8 @@ const s = ( sk ) => {
     //set p5js size and call loop
     sk.resizeCanvas(w.w, w.h);
     skWidth = w.w
-    sk.background(235, 213, 179);
+    const col = feet.background.value
+    sk.background(col.r, col.g, col.b);
 
     setSketchLengths()
 
@@ -222,7 +213,7 @@ const s = ( sk ) => {
     //margins
     skMarginSize = skWidth * 0.04
 
-    //curve amplitudes - widths are set in the loop... heights have to respond to height
+    //curve amplitudes - widths are set in the loop... heights have to respond to canvas height
     waveA_topAmplitude = feet.map(feet.amplitudeSeeds.aTopSeed, 0, 1, skWidth * 0.02, skWidth * 0.05)
     waveA_bottomAmplitude = feet.map(feet.amplitudeSeeds.aBottomSeed, 0, 1, skWidth * 0.01, skWidth * 0.025)
 
