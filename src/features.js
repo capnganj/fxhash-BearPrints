@@ -24,7 +24,9 @@ class Features {
             aTopSeed: 0.0,
             aBottomSeed: 0.0,
             bTopSeed: 0.0,
-            bBottomSeed: 0.0
+            bBottomSeed: 0.0,
+            aTag: "",
+            bTag: ""
         }
         this.setAmplitudeSeeds();
 
@@ -33,7 +35,10 @@ class Features {
             aTop: 0.0,
             aBottom: 0.0,
             bTop: 0.0,
-            bBottom: 0.0
+            bBottom: 0.0,
+            aTag: "",
+            bTag: ""
+
         }
         this.setWavelengths()
 
@@ -243,18 +248,64 @@ class Features {
 
     //set top and bottom (a and b sets of curves) amplitude seed values
     setAmplitudeSeeds() {
+        //a curves amplitudes
         this.amplitudeSeeds.aTopSeed = fxrand()
         this.amplitudeSeeds.aBottomSeed = fxrand()
+        const aDiff = Math.abs(this.amplitudeSeeds.aTopSeed - this.amplitudeSeeds.aBottomSeed)
+        if (aDiff < 0.35) {
+            this.amplitudeSeeds.aTag = "101"
+        } 
+        else if (aDiff < 0.88) {
+            this.amplitudeSeeds.aTag = "201"
+        }
+        else {
+            this.amplitudeSeeds.aTag = "401"
+        }
+
+        //b curves amplitudes
         this.amplitudeSeeds.bTopSeed = fxrand()
         this.amplitudeSeeds.bBottomSeed = fxrand()
+        const bDiff = Math.abs(this.amplitudeSeeds.bTopSeed - this.amplitudeSeeds.bBottomSeed)
+        if (bDiff < 0.66) {
+            this.amplitudeSeeds.bTag = "121"
+        } 
+        else if (bDiff < 0.92) {
+            this.amplitudeSeeds.bTag = "212"
+        }
+        else {
+            this.amplitudeSeeds.bTag = "323"
+        }
+
     }
 
     setWavelengths() {
+        //a curves wavelengths
         this.wavelengths.aTop = this.map(fxrand(), 0, 1, 1.5, 3)
         this.wavelengths.aBottom = this.map(fxrand(), 0, 1, 5, 8)
+        const aSum = this.wavelengths.aTop + this.wavelengths.aBottom
+        if (aSum < 7) {
+            this.wavelengths.aTag = "808"
+        } 
+        else if (aSum < 10.5) {
+            this.wavelengths.aTag = "969"
+        }
+        else {
+            this.wavelengths.aTag = "1221"
+        }
 
+        //b curves wavelengths
         this.wavelengths.bTop = this.map(fxrand(), 0, 1, 0.5, 1.0)
         this.wavelengths.bBottom = this.map(fxrand(), 0, 1, 2.0, 3.0)
+        const bSum = this.wavelengths.bTop + this.wavelengths.bBottom
+        if (bSum < 2.75) {
+            this.wavelengths.bTag = "3113"
+        } 
+        else if (bSum < 3) {
+            this.wavelengths.bTag = "4224"
+        }
+        else {
+            this.wavelengths.bTag = "5555"
+        }
     }
 
     setHand() {

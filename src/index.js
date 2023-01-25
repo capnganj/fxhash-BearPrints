@@ -58,7 +58,11 @@ const s = ( sk ) => {
       "Backgound" : feet.background.tag,
       "Palette Range" : feet.paletteRange.tag,
       "Direction" : feet.hand.tag,
-      "Layer Count" : feet.curveCount.toString()
+      "Layer Count" : feet.curveCount.toString(),
+      "A Waves Amplitude": feet.amplitudeSeeds.aTag,
+      "B Waves Amplitude": feet.amplitudeSeeds.bTag,
+      "A Waves Wavelength": feet.wavelengths.aTag,
+      "B Waves Wavelength" : feet.wavelengths.bTag,
     };
     console.log("fxhashFeatures", window.$fxhashFeatures);
     //console.log("HashSmokeFeatures", feet);
