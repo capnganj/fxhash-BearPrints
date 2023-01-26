@@ -310,7 +310,7 @@ class Features {
 
     setHand() {
         const h = fxrand()
-        if (h < 0.12) {
+        if (h < 0.32) {
             this.hand.tag = "Left"
             this.hand.value = 0
             
@@ -346,16 +346,16 @@ class Features {
         if (p < 0.15) {
             this.paletteRange.tag = "Lows"
             this.paletteRange.lowValue = 0.05
-            this.paletteRange.highValue = 0.6
+            this.paletteRange.highValue = 0.7
         } 
         else if ( p < 0.33 ) {
             this.paletteRange.tag = "Mids"
-            this.paletteRange.lowValue = 0.35
-            this.paletteRange.highValue = 0.66
+            this.paletteRange.lowValue = 0.25
+            this.paletteRange.highValue = 0.8
         }
         else if ( p < 0.57 ) {
             this.paletteRange.tag = "Highs"
-            this.paletteRange.lowValue = 0.4
+            this.paletteRange.lowValue = 0.3
             this.paletteRange.highValue = 0.95
         }
         else {
