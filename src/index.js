@@ -64,7 +64,7 @@ const s = ( sk ) => {
       "A Waves Wavelength": feet.wavelengths.aTag,
       "B Waves Wavelength" : feet.wavelengths.bTag,
     };
-    console.log("fxhashFeatures", window.$fxhashFeatures);
+    //console.log("fxhashFeatures", window.$fxhashFeatures);
     //console.log("HashSmokeFeatures", feet);
 
 
@@ -149,7 +149,7 @@ const s = ( sk ) => {
       if( previewed == false) {
         fxpreview();
         previewed = true;
-        download();
+        //download();
       }
     }
   };
